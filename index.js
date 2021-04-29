@@ -1,36 +1,75 @@
-const express = require('express');
+const express = require('express'),
+	morgan = require('morgan');
+
 const app = express();
 
-let topMovies = [
+let movies = [
   {
-    title: 'A Bronx Tale'
-
+    title: 'A Bronx Tale',
+		year: '1993'
   },
   {
-    title: 'The Illusionist'
-
+    title: 'The Illusionist',
+		year: '2006'
   },
   {
-    title: 'Forgetting Sarah Marshall'
+    title: 'mid90s',
+		year: '2018'
+  },
+	{
+    title: 'Forgetting Sarah Marshall',
+		year: '2008'
+  },
+  {
+    title: 'Once Upon A Time In Hollywood',
+		year: '2019'
+  },
+  {
+    title: 'Alpha Dog',
+		year: '2006'
+  },
+	{
+    title: 'Clerks',
+		year: '1994'
+  },
+  {
+    title: 'King Kong',
+		year: '2005'
+  },
+  {
+    title: 'As Good as It Gets',
+		year: '1997'
+  },
+	{
+    title: 'Rush Hour 2',
+		year: '2001'
+  },
+  {
+    title: 'Beverly Hills Ninja',
+		year: '1997'
+  },
 
-  }
 ];
 
 // GET requests
 app.get('/', (req, res) => {
-  res.send('Welcome to my movie club!');
+  res.send('Favorite movies from 1993-2019.');
 });
 
-app.get('/documentation', (req, res) => {
-  res.sendFile('public/documentation.html', { root: __dirname });
+app.use(morgan('common'));
+
+app.use(express.static('public'));
+
+app.get('/movies', (req, res) => {
+  res.json(movies);
 });
 
-app.get('/books', (req, res) => {
-  res.json(topMovies);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Uh-oh! Something went wrong!');
 });
-
 
 // listen for requests
-app.listen(8080, () =>{
+app.listen(8080, () => {
   console.log('Your app is listening on port 8080.');
 });
